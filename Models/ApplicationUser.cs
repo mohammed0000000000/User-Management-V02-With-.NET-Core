@@ -1,6 +1,8 @@
-﻿namespace UserManagementV02.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace UserManagementV02.Models
 {
-	public class ApplicatinUser
+	public class ApplicationUser : IdentityUser
 	{
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
