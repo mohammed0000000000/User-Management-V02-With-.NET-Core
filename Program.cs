@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserManagementV02.Data;
+using UserManagementV02.Filters;
+using UserManagementV02.Interfaces;
 using UserManagementV02.Middelwares;
 using UserManagementV02.Models;
+using UserManagementV02.Services;
 using UserManagementV02.Settings;
 
 namespace UserManagementV02
@@ -34,12 +37,17 @@ namespace UserManagementV02
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>().
 			AddEntityFrameworkStores<AppDbContext>().
 			AddDefaultTokenProviders(); /// to automatic generate token 
-			builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
-			{
+			builder.Services.Configure<DataProtectionTokenProviderOptions>(options => {
 				options.TokenLifespan = TimeSpan.FromHours(2); // Set token expiration time
 			});
+			// Register Custom Services
+			builder.Services.AddScoped<IAdminService, AdminServices>();
+			builder.Services.AddTransient<IMailService, MailServices>();
+			// -- Register Eception filter
+			//builder.Services.AddControllers(options => {
+			//	options.Filters.Add<CustomExceptionFilter>(); // applay global
+			//});
 
-			
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

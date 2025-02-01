@@ -1,9 +1,10 @@
 ﻿using UserManagementV02.Requests;
+using UserManagementV02.Responses;
 
 namespace UserManagementV02.Interfaces
 {
 	public interface IMailService
 	{
-		Task<bool> SendEmail(MailRequest request);
+		Task<SendEmailResponse> SendEmail(MailRequest request);
 	}
 }

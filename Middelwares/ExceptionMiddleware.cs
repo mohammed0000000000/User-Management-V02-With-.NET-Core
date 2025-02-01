@@ -23,7 +23,7 @@ namespace UserManagementV02.Middelwares
 		}
 		
 		private static async Task HandleExceptionAsync(HttpContext context, Exception exception){
-			context.Response.ContentType = "application/problem+json";
+			context.Response.ContentType = "application/json";
 			var statusCode = exception switch {
 				NotFoundException => StatusCodes.Status404NotFound,
 				ValidationException => StatusCodes.Status400BadRequest,

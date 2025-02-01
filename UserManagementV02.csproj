@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Config\" />
-    <Folder Include="Filters\" />
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>
