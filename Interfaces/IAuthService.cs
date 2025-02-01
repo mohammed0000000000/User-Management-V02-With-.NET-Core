@@ -1,11 +1,14 @@
-﻿namespace UserManagementV02.Interfaces
+﻿using UserManagementV02.Models;
+using UserManagementV02.Requests;
+
+namespace UserManagementV02.Interfaces
 {
 	public interface IAuthService
 	{
-		Task<AuthModel> RegisterAsync(registerDto registerDto);
-		Task<AuthModel> LoginAsync(loginDto loginDto);
+		Task<AuthModel> RegisterAsync(SignUpRequest request);
+		Task<AuthModel> LoginAsync(SignInRequest request);
 		Task<AuthModel> RefreshTokenAsync(string token);
 		Task<bool> RefreshTokenRevokeAsync(string token);
-		Task<bool> VerifyEmail(verifyEmailDto model)
+		Task<bool> VerifyEmail(VerifyEmailRequest request);
 	}
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserManagementV02.Data;
+using UserManagementV02.Middelwares;
 using UserManagementV02.Models;
 using UserManagementV02.Settings;
 
@@ -17,6 +18,10 @@ namespace UserManagementV02
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+
+			// Add Logging
+			builder.Logging.ClearProviders();
+			builder.Logging.AddConsole();
 
 			// -------
 			builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JWTSettings"));
@@ -45,8 +50,9 @@ namespace UserManagementV02
 
 			app.UseHttpsRedirection();
 
+			// Register Global Exception Handling
+			app.UseMiddleware<ExceptionMiddleware>();
 			app.UseAuthorization();
-
 
 			app.MapControllers();
 
