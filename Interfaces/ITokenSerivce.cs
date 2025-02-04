@@ -4,12 +4,12 @@ using UserManagementV02.Responses;
 
 namespace UserManagementV02.Interfaces
 {
-	public interface IAuthService
+	public interface ITokenSerivce
 	{
-		Task<AuthResponse> RegisterAsync(SignUpRequest request);
-		Task<AuthResponse> LoginAsync(SignInRequest request);
+		Task<Tuple<string, RefreshToken>> GenerateTokenAsync(ApplicationUser user);
 		Task<AuthResponse> RefreshTokenAsync(string token);
 		Task<bool> RefreshTokenRevokeAsync(string token);
-		Task<bool> VerifyEmail(VerifyEmailRequest request);
+		//Task<bool> ValidateRefreshTokenAsync(ValidateRefreshTokenRequest request);
+		//Task<bool> RemoveRefreshTokenAsync(ApplicationUser user);
 	}
 }

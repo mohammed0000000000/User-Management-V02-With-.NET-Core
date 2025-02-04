@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserManagementV02.Data;
 using UserManagementV02.Filters;
+using UserManagementV02.Helpers;
 using UserManagementV02.Interfaces;
 using UserManagementV02.Middelwares;
 using UserManagementV02.Models;
@@ -43,6 +44,8 @@ namespace UserManagementV02
 			// Register Custom Services
 			builder.Services.AddScoped<IAdminService, AdminServices>();
 			builder.Services.AddTransient<IMailService, MailServices>();
+
+			builder.Services.AddScoped<TokenHelpers>();
 			// -- Register Eception filter
 			//builder.Services.AddControllers(options => {
 			//	options.Filters.Add<CustomExceptionFilter>(); // applay global
