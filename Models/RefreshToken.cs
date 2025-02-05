@@ -1,5 +1,9 @@
-﻿namespace UserManagementV02.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace UserManagementV02.Models
 {
+
+	[Owned]
 	public class RefreshToken
 	{
 		public string Token { get; set; } = string.Empty;

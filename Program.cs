@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using UserManagementV02.Data;
 using UserManagementV02.Filters;
@@ -46,6 +47,11 @@ namespace UserManagementV02
 			builder.Services.AddTransient<IMailService, MailServices>();
 
 			builder.Services.AddScoped<TokenHelpers>();
+			builder.Services.AddScoped<ITokenSerivce, TokenServices>();
+
+			// Register dependencies
+			builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 			// -- Register Eception filter
 			//builder.Services.AddControllers(options => {
 			//	options.Filters.Add<CustomExceptionFilter>(); // applay global

@@ -51,12 +51,20 @@ namespace UserManagementV02.Services
 				};
 			
 		}
-		public Task<bool> RemoveRefreshTokenAsync(ApplicationUser user) {
-			throw new NotImplementedException();
+		public async Task<bool> RefreshTokenRevokeAsync(string token) {
+				var user = await userManager.Users.SingleOrDefaultAsync(user => user.RefreshTokens.Any(x => x.Token == token && x.isActive));
+				if (user is null)
+					return false;
+				var refreshToken = user.RefreshTokens.First(x => x.Token == token);
+				refreshToken.RevokedOn = DateTime.UtcNow;
+				return true;
 		}
+		//public Task<bool> RemoveRefreshTokenAsync(ApplicationUser user) {
+		//	throw new NotImplementedException();
+		//}
 
-		public Task<bool> ValidateRefreshTokenAsync(ValidateRefreshTokenRequest request) {
-			throw new NotImplementedException();
-		}
+		//public Task<bool> ValidateRefreshTokenAsync(ValidateRefreshTokenRequest request) {
+		//	throw new NotImplementedException();
+		//}
 	}
 }
