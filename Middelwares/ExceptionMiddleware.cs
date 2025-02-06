@@ -26,16 +26,21 @@ namespace UserManagementV02.Middelwares
 			context.Response.ContentType = "application/json";
 			var statusCode = exception switch {
 				NotFoundException => StatusCodes.Status404NotFound,
-				ValidationException => StatusCodes.Status400BadRequest,
+				BadRequestException => StatusCodes.Status400BadRequest,
+				UnprocessableEntityException => StatusCodes.Status422UnprocessableEntity,
 				_ => StatusCodes.Status500InternalServerError
 			};
 			context.Response.StatusCode = statusCode;
+
+			var ex = exception as BaseException;
 			var problemDetails = new ProblemDetails {
-				Title = "An Error Occurred While Processing Your Request",
+				Title = $"An Error Occurred While Processing Your Request\n {ex.Message}",
 				Status = statusCode,
-				Detail = exception.Message,
-				Instance = context.Request.Path
+				Detail = ex.Message,
+				Instance = context.Request.Path,
+				Extensions = {["errors"] = ex.Errors}
 			};
+			
 			await context.Response.WriteAsJsonAsync(problemDetails);
 		}
 	}

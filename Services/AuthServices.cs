@@ -6,6 +6,7 @@ using UserManagementV02.Interfaces;
 using UserManagementV02.Models;
 using UserManagementV02.Requests;
 using UserManagementV02.Responses;
+using UserManagementV02.Templates;
 
 namespace UserManagementV02.Services
 {
@@ -53,7 +54,10 @@ namespace UserManagementV02.Services
 			var token = await tokenSerivce.GenerateTokenAsync(user);
 			return new AuthResponse() {
 				Success = true,
+				Message = "Login Successfully",
 				UserName = user.UserName,
+				UserId = user.Id,
+				Email = user.Email,
 				AccessToken = token.Item1,
 				RefreshToken = token.Item2.Token,
 				RefreshTokenExpireOn = token.Item2.ExpiresOn
@@ -73,33 +77,41 @@ namespace UserManagementV02.Services
 			var user = new ApplicationUser() {
 				Email = request.Email,
 				FirstName = request.FirstName,
-				LastName = request.LastName
+				LastName = request.LastName,
+				EmailConfirmed = false,
+				CreatedAt = DateTime.UtcNow,
 			};
 			var result = await userManager.CreateAsync(user, request.Password);
 
-			if (!result.Succeeded)
+			if (!result.Succeeded){
+				var errors = string.Join(",\n", result.Errors.Select(x => x.Description));
 				return new AuthResponse() {
 					Success = false,
-					Error = "Enter Server Error, when Register",
+					Error = "Registeration Failed " + errors,
 					ErrorCode = "R02"
 				};
+			}
 			// Send verifacation mail
 			var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
 			var confirmUrl = urlHelperFactory.Action("ConfirmEmail", "Auth", new { userId = user.Id, token });
+
 			var mailRequest = new MailRequest() {
 				ToEmail = request.Email,
 				Subject = "Confirm Your Email",
-				Body = $"Registration Successful! Welcome to [Your Application Name]. Please Confirm your account by click on this email :{confirmUrl}"
+				Body = MailTemplates.EmailConfirmTemplate("nerbay",user.UserName, confirmUrl)
 			};
 			var sendEmail = await mailService.SendEmail(mailRequest);
 			if (!sendEmail.Success)
 				return new AuthResponse() {
 					Success = false,
-					Error = "Enter Server Error, when Sending Confirm Email",
+					Error = "Failed to send verification email",
 					ErrorCode = "R03"
 				};
 			return new AuthResponse() {
 				Success = true,
+				Message = "Registration successful. Please check your email to verify your account.",
+				UserId = user.Id,
+				UserName = user.UserName,
 			};
 		}
 

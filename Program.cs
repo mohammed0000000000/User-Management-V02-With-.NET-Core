@@ -49,6 +49,7 @@ namespace UserManagementV02
 			builder.Services.AddScoped<TokenHelpers>();
 			builder.Services.AddScoped<ITokenSerivce, TokenServices>();
 
+			builder.Services.AddScoped<IAuthService, AuthServices>();
 			// Register dependencies
 			builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
